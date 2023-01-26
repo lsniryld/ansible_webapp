@@ -1,0 +1,8 @@
+---
+- hosts: client1
+  remote_user: admin
+  tasks:
+    - name: check website
+      uri:
+        url: http://{{ ansible_host }}
+        status_code: 200

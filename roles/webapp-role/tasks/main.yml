@@ -1,0 +1,57 @@
+---
+# tasks install application and dependaces
+- name: Check for the correct OS distributon and version
+  fail:
+    msg: The OS distributon should be centos 7
+  when: ansible_distribution != "CentOS" or ansible_distribution_major_version != "7"
+  
+- name: Install some package and prerequisites
+  package: name={{ item }} state=present
+  with_items:
+    - epel-release
+    - wget
+    - git
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+    - python3
+    - python3-pip   
+
+# tasks install docker 
+- name: Add docker repositories
+  yum_repository:
+    name: docker
+    description: docker
+    baseurl: https://download.docker.com/linux/centos/7/x86_64/stable
+    enabled: yes
+- name: Add Docker GPG Key
+  rpm_key:
+    key: https://download.docker.com/linux/centos/gpg
+    state: present
+
+- name: Install docker engine
+  package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+
+- name: docker python
+  pip:
+    name: docker-py
+    executable: pip3
+
+# tasks file for webapp-role
+- name: Copy file template
+  template:
+    src: "{{ file_template }}"
+    dest: "/home/{{ system_user }}/index.html"
+- name: Create Apache container
+  docker_container:
+    name: webapp
+    image: httpd
+    ports:
+        - "{{ webapp_port }}:{{ apache_port }}"
+    volumes:
+        - "/home/{{ system_user }}/index.html:/usr/local/apache2/htdocs/index.html"
