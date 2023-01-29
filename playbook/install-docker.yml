@@ -4,19 +4,13 @@
   become: yes
   tags: docker
   pre_tasks:
-    - name: Install pre-requisite packages
-      yum:
-        name: "{{item}}"
-        state: latest
-        when: ansible_distribution == 'CentOS'
+    - name: Install EPEL repo
+      package: name='{{ item }}' state=present
+      when: ansible_distribution == 'CentOS'
       loop:
         - epel-release
         - wget
-        - git
-        - yum-utils
-        - device-mapper-persistent-data
-        - lvm2
-        
+        - git        
       
     - name: download pip script
       get_url:
