@@ -6,19 +6,15 @@
   vars:
     ansible_python_interpreter: /usr/bin/python3
   tasks:
-    - name: "Clean Folder"
+    - name: Clean Folder 
       file:
-        path: "/home/{{ ansible_user }}/webapp"
+        path: "/home/{{ ansible_user }}/webapp/"
         state: absent
     - name: Create webapp directory
       file:
         path: "/home/{{ ansible_user }}/webapp/"
         state: directory
-    - name: "Install git"
-      yum:
-        name: git
-        state: present
-        update_cache: yes
+   
     - name: "git clone to folder"
       git:
         repo: https://github.com/lsniryld/static-website-example.git
