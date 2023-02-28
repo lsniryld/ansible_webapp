@@ -46,7 +46,7 @@
 - name: Copy file template
   template:
     src: "{{ file_template }}"
-    dest: "/home/{{ system_user }}/index.html"
+    dest: "/home/{{ system_user }}/ansible_webapp/index.html"
 - name: Create Apache container
   docker_container:
     name: webapp
@@ -54,4 +54,4 @@
     ports:
         - "{{ webapp_port }}:{{ apache_port }}"
     volumes:
-        - "/home/{{ system_user }}/index.html:/usr/local/apache2/htdocs/index.html"
+        - "/home/{{ system_user }}/ansible_webapp/index.html:/usr/local/apache2/htdocs/index.html"
