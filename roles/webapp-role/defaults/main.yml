@@ -1,6 +1,6 @@
 ---
 # defaults file for webapp-role---
-system_user: admin
+system_user: vagrant
 webapp_port: 80
 apache_port: 80
 file_template: index.html.j2
